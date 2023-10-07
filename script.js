@@ -16,13 +16,13 @@ onload = function(){
     sliderB.addEventListener("input", update );
     sliderC.addEventListener("input", update );
 
-    //window.addEventListener("deviceorientation", function(e){
-    //    let alp = ( e.alpha || 0);
-    //    let bet = ( e.beta  || 0);
-    //    let gam = ( e.gamma || 0);
-    //    dcm = calcDCM( alp, bet, gam );
-    //    update( slider = false );
-    //});
+    window.addEventListener("deviceorientation", function(e){
+        let alp = ( e.alpha || 0);
+        let bet = ( e.beta  || 0);
+        let gam = ( e.gamma || 0);
+        dcm = calcDCM( alp, bet, gam );
+        update( slider = false );
+    });
 
 
     let canvas1 = document.getElementById('canvas');
@@ -52,7 +52,7 @@ onload = function(){
     function update( slider = true ){
         //console.log( 'update' );
         if( slider ){
-            dcm = calcDCM( sliderA.value, sliderB.value, sliderC.value );
+            //dcm = calcDCM( sliderA.value, sliderB.value, sliderC.value );
         }
         view1.update( dcm );
     }
@@ -259,7 +259,7 @@ function SceneView( canvas ){
 
     //
     //-------------------
-    //    ínå`
+    //    ‚Äôn≈í`
     //-------------------
 
     glView.addGeomObje( 'geom' );
@@ -273,7 +273,7 @@ function SceneView( canvas ){
 
     //
     //-------------------
-    //    ãÛç`
+    //    ‚Äπ√≥¬ç`
     //-------------------
 
     var color =  [ 0.1, 0.1, 0.1,1.0,  0.5, 0.5, 0.0,1.0,  0.0, 0.0, 0.0, 1.0, 50]
@@ -334,7 +334,7 @@ SceneView.prototype.update = function( dcm ){
 
 //--------------------------------------------------------
 //
-//	êîäwä÷êî
+//	¬ê‚Äù≈†w≈†√ñ¬ê‚Äù
 //
 //--------------------------------------------------------
 
