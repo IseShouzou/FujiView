@@ -69,9 +69,9 @@ onload = function(){
     function update(){
         //console.log( 'update' );
 
-        alp = sliderA.value;
-        bet = sliderB.value;
-        gam = sliderC.value;
+        //alp = sliderA.value;
+        //bet = sliderB.value;
+        //gam = sliderC.value;
 
         let dcm = calcDCM( alp, bet, gam );
         view1.update( dcm );
@@ -226,11 +226,11 @@ CameraView.prototype.update = function( imageBitmap, dcm ){
     //ctx.fillStyle = "#ddd";
     //ctx.fillRect(0, 0, W, H );
 
-    ctx.beginPath();
-    ctx.rect( 0, 0, 0.95*W, 0.95*H );
-    ctx.strokeStyle = 'deepskyblue';
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    //ctx.beginPath();
+    //ctx.rect( 0, 0, 0.95*W, 0.95*H );
+    //ctx.strokeStyle = 'deepskyblue';
+    //ctx.lineWidth = 4;
+    //ctx.stroke();
 
     ctx.beginPath();
     flag = true;
