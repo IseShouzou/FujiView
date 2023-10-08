@@ -1,4 +1,3 @@
-
 onload = function(){
 
     document.oncontextmenu = function () {return false;}
@@ -20,7 +19,7 @@ onload = function(){
     sliderB.addEventListener("input", update );
     sliderC.addEventListener("input", update );
 
-    //window.addEventListener("deviceorientation", function(e){
+    ////window.addEventListener("deviceorientation", function(e){
     window.addEventListener("deviceorientationabsolute", function(e){
         alp = ( e.alpha || 0);
         bet = ( e.beta  || 0);
@@ -45,7 +44,10 @@ onload = function(){
     } )
 
     canvas2.addEventListener("touchstart", () => {
-        //console.log( 'touchstart' );
+        console.log( 'touchstart' );
+
+        view2.flag = ! view2.flag;
+
         alp0 = sliderA.value;
         bet0 = sliderB.value;
         gam0 = sliderC.value;
@@ -133,6 +135,8 @@ function CameraView( canvas ){
 
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
+
+    this.flag = false;
 
     this.fovy = 90.0;
     //this.pnts = [ [ 0.5, -0.5, -0.3 ],
@@ -225,12 +229,15 @@ CameraView.prototype.update = function( imageBitmap, dcm ){
 
     //ctx.fillStyle = "#ddd";
     //ctx.fillRect(0, 0, W, H );
+    //console.log( this.flag );
 
-    //ctx.beginPath();
-    //ctx.rect( 0, 0, 0.95*W, 0.95*H );
-    //ctx.strokeStyle = 'deepskyblue';
-    //ctx.lineWidth = 4;
-    //ctx.stroke();
+    if( this.flag ){
+        ctx.beginPath();
+        ctx.rect( 0.1*W, 0.1*H, 0.8*W, 0.8*H );
+        ctx.strokeStyle = 'deepskyblue';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+    }
 
     ctx.beginPath();
     flag = true;
@@ -725,6 +732,4 @@ function base64ToArrayBuffer(base64) {
   }
   return bytes.buffer;
 }
-
-
 
