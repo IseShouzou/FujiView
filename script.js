@@ -7,23 +7,26 @@ onload = function(){
     let sliderB = document.getElementById( "SliderBeta"  );
     let sliderC = document.getElementById( "SliderGamma" );
 
+    let alp0 = 0.0;
+    let bet0 = 0.0;
+    let gam0 = 0.0;
+
     let alp = sliderA.value;
     let bet = sliderB.value;
     let gam = sliderC.value;
-    let dcm = calcDCM( sliderA.value, sliderB.value, sliderC.value );
+    //let dcm = calcDCM( alp - alp0, bet, gam );
 
     sliderA.addEventListener("input", update );
     sliderB.addEventListener("input", update );
     sliderC.addEventListener("input", update );
 
-    window.addEventListener("deviceorientation", function(e){
-        let alp = ( e.alpha || 0);
-        let bet = ( e.beta  || 0);
-        let gam = ( e.gamma || 0);
-        dcm = calcDCM( alp, bet, gam );
-        update( slider = false );
+    ////window.addEventListener("deviceorientation", function(e){
+    window.addEventListener("deviceorientationabsolute", function(e){
+        alp = ( e.alpha || 0);
+        bet = ( e.beta  || 0);
+        gam = ( e.gamma || 0);
+        update();
     });
-
 
     let canvas1 = document.getElementById('canvas');
     let view1 = new SceneView( canvas1 );
@@ -41,19 +44,36 @@ onload = function(){
         resize();
     } )
 
+    canvas2.addEventListener("touchstart", () => {
+        //console.log( 'touchstart' );
+        alp0 = sliderA.value;
+        bet0 = sliderB.value;
+        gam0 = sliderC.value;
+        update()
+    })
+
     function resize(){
-        //console.log( 'resize' );
+        console.log( 'resize' );
+
+        alp0 = alp;
+        bet0 = bet;
+        gam0 = gam;
+
+        let dcm = calcDCM( alp, bet, gam );
         view1.resize( dcm );
         canvas2.setAttribute( "width", screen.width );
         canvas2.setAttribute( "height", screen.height );
     }
 
 
-    function update( slider = true ){
+    function update(){
         //console.log( 'update' );
-        if( slider ){
-            //dcm = calcDCM( sliderA.value, sliderB.value, sliderC.value );
-        }
+
+        alp = sliderA.value;
+        bet = sliderB.value;
+        gam = sliderC.value;
+
+        let dcm = calcDCM( alp, bet, gam );
         view1.update( dcm );
     }
 
@@ -65,6 +85,7 @@ onload = function(){
             setInterval(() => {
                 imageCapture.grabFrame()
                     .then((imageBitmap) => {
+                        let dcm = calcDCM( alp - alp0, bet - bet0, gam - gam0 );
                         view2.update( imageBitmap, dcm );
                     })
                     .catch( (e) => {} );
@@ -119,10 +140,15 @@ function CameraView( canvas ){
     //              [ 0.5,  0.5,  0.3 ],
     //              [ 0.5, -0.5,  0.3 ] ];
 
-    this.pnts = [ [ -0.2,  0.5, -0.5 ],
-                  [  0.2,  0.5, -0.5 ],
-                  [  0.2,  0.5, -0.2 ],
-                  [ -0.2,  0.5, -0.2 ] ];
+    //this.pnts = [ [ -0.2,  0.5, -0.5 ],
+    //              [  0.2,  0.5, -0.5 ],
+    //              [  0.2,  0.5, -0.2 ],
+    //              [ -0.2,  0.5, -0.2 ] ];
+
+    this.pnts = [ [ -0.2, -0.4, -0.5 ],
+                  [  0.2, -0.4, -0.5 ],
+                  [  0.2, -0.1, -0.5 ],
+                  [ -0.2, -0.1, -0.5 ] ];
 
 }
 
@@ -201,6 +227,12 @@ CameraView.prototype.update = function( imageBitmap, dcm ){
     //ctx.fillRect(0, 0, W, H );
 
     ctx.beginPath();
+    ctx.rect( 0, 0, 0.95*W, 0.95*H );
+    ctx.strokeStyle = 'deepskyblue';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.beginPath();
     flag = true;
     for( let p of curPnts ){
         XX = W / 2.0 - e * p[0] / p[2];
@@ -259,7 +291,7 @@ function SceneView( canvas ){
 
     //
     //-------------------
-    //    ’nŒ`
+    //    地形
     //-------------------
 
     glView.addGeomObje( 'geom' );
@@ -273,7 +305,7 @@ function SceneView( canvas ){
 
     //
     //-------------------
-    //    ‹ó`
+    //    空港
     //-------------------
 
     var color =  [ 0.1, 0.1, 0.1,1.0,  0.5, 0.5, 0.0,1.0,  0.0, 0.0, 0.0, 1.0, 50]
@@ -334,7 +366,7 @@ SceneView.prototype.update = function( dcm ){
 
 //--------------------------------------------------------
 //
-//	”ŠwŠÖ”
+//	数学関数
 //
 //--------------------------------------------------------
 
