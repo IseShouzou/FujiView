@@ -20,8 +20,8 @@ onload = function(){
     sliderB.addEventListener("input", update );
     sliderC.addEventListener("input", update );
 
-    ////window.addEventListener("deviceorientation", function(e){
-    window.addEventListener("deviceorientationabsolute", function(e){
+    window.addEventListener("deviceorientation", function(e){
+    //window.addEventListener("deviceorientationabsolute", function(e){
         alp = ( e.alpha || 0);
         bet = ( e.beta  || 0);
         gam = ( e.gamma || 0);
