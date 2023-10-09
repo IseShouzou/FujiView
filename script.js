@@ -48,9 +48,9 @@ onload = function(){
 
         view2.flag = ! view2.flag;
 
-        alp0 = sliderA.value;
-        bet0 = sliderB.value;
-        gam0 = sliderC.value;
+        //alp0 = sliderA.value;
+        //bet0 = sliderB.value;
+        //gam0 = sliderC.value;
         update()
     })
 
