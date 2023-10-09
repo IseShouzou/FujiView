@@ -1,3 +1,4 @@
+
 onload = function(){
 
     document.oncontextmenu = function () {return false;}
@@ -12,6 +13,8 @@ onload = function(){
     let bet0 = 0.0;
     let gam0 = 0.0;
 
+    let dcm0 = calcDCM( 0.0, 0.0, 0.0 );;
+
     let alp = sliderA.value;
     let bet = sliderB.value;
     let gam = sliderC.value;
@@ -20,8 +23,8 @@ onload = function(){
     sliderB.addEventListener("input", update );
     sliderC.addEventListener("input", update );
 
-    window.addEventListener("deviceorientation", function(e){
-    //window.addEventListener("deviceorientationabsolute", function(e){
+    ////window.addEventListener("deviceorientation", function(e){
+    window.addEventListener("deviceorientationabsolute", function(e){
         alp = ( e.alpha || 0);
         bet = ( e.beta  || 0);
         gam = ( e.gamma || 0);
@@ -51,19 +54,23 @@ onload = function(){
             alp0 = sliderA.value;
             bet0 = sliderB.value;
             gam0 = sliderC.value;
+            dcm0 = calcDCM( sliderA.value, sliderB.value, sliderC.value );;
         }else{
             alp0 = alp;
             bet0 = bet;
             gam0 = gam;
+            dcm0 = calcDCM( alp, bet, gam );
         }
         update()
     })
 
     function resize(){
         console.log( 'resize' );
-        alp0 = alp;
-        bet0 = bet;
-        gam0 = gam;
+        //alp0 = alp;
+        //bet0 = bet;
+        //gam0 = gam;
+
+        dcm0 = calcDCM( alp, bet, gam );
         let dcm = calcDCM( alp, bet, gam );
         view1.resize( dcm );
         canvas2.setAttribute( "width", screen.width );
@@ -88,8 +95,19 @@ onload = function(){
             setInterval(() => {
                 imageCapture.grabFrame()
                     .then((imageBitmap) => {
-                        let dcm = calcDCM( alp - alp0, bet - bet0, gam - gam0 );
-                        view2.update( imageBitmap, dcm );
+                        //let dcm = calcDCM( alp - alp0, bet - bet0, gam - gam0 );
+                        let dcm = calcDCM( alp, bet, gam );
+                        let dcmX = dcm.slice().map(row => row.slice());
+                        //console.log( 'dcm0  : ', dcm0[0] )
+                        for( let i=0; i<3; i++ ){
+                            for( let j=0; j<3; j++ ){
+                                dcmX[i][j] = 0.0;
+                                for( let k=0; k<3; k++ ){
+                                    dcmX[i][j] += dcm[i][k] * dcm0[k][j];
+                                }
+                            }
+                        }
+                        view2.update( imageBitmap, dcmX );
                     })
                     .catch( (e) => {} );
              }, 10 );
@@ -145,15 +163,15 @@ function CameraView( canvas ){
     //              [ 0.5,  0.5,  0.3 ],
     //              [ 0.5, -0.5,  0.3 ] ];
 
-    //this.pnts = [ [ -0.2,  0.5, -0.5 ],
-    //              [  0.2,  0.5, -0.5 ],
-    //              [  0.2,  0.5, -0.2 ],
-    //              [ -0.2,  0.5, -0.2 ] ];
+    this.pnts = [ [ -0.2,  0.5, -0.5 ],
+                  [  0.2,  0.5, -0.5 ],
+                  [  0.2,  0.5, -0.2 ],
+                  [ -0.2,  0.5, -0.2 ] ];
 
-    this.pnts = [ [ -0.2, -0.4, -0.5 ],
-                  [  0.2, -0.4, -0.5 ],
-                  [  0.2, -0.1, -0.5 ],
-                  [ -0.2, -0.1, -0.5 ] ];
+    //this.pnts = [ [ -0.2, -0.4, -0.5 ],
+    //              [  0.2, -0.4, -0.5 ],
+    //              [  0.2, -0.1, -0.5 ],
+    //              [ -0.2, -0.1, -0.5 ] ];
 
 }
 
@@ -717,7 +735,8 @@ function arrayBufferToBase64(buffer) {
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
   for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+    b
+inary += String.fromCharCode(bytes[i]);
   }
   return window.btoa(binary);
 }
@@ -733,4 +752,3 @@ function base64ToArrayBuffer(base64) {
   }
   return bytes.buffer;
 }
-
