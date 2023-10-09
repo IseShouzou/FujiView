@@ -45,12 +45,10 @@ onload = function(){
 
     canvas2.addEventListener("touchstart", () => {
         console.log( 'touchstart' );
-
         view2.flag = ! view2.flag;
-
-        //alp0 = sliderA.value;
-        //bet0 = sliderB.value;
-        //gam0 = sliderC.value;
+        alp0 = alp;
+        bet0 = bet;
+        gam0 = gam;
         update()
     })
 
