@@ -2,6 +2,8 @@ onload = function(){
 
     document.oncontextmenu = function () {return false;}
 
+    let slider = false;
+
     let sliderA = document.getElementById( "SliderAlpha" );
     let sliderB = document.getElementById( "SliderBeta"  );
     let sliderC = document.getElementById( "SliderGamma" );
@@ -13,7 +15,6 @@ onload = function(){
     let alp = sliderA.value;
     let bet = sliderB.value;
     let gam = sliderC.value;
-    //let dcm = calcDCM( alp - alp0, bet, gam );
 
     sliderA.addEventListener("input", update );
     sliderB.addEventListener("input", update );
@@ -46,37 +47,39 @@ onload = function(){
     canvas2.addEventListener("touchstart", () => {
         console.log( 'touchstart' );
         view2.flag = ! view2.flag;
-        alp0 = alp;
-        bet0 = bet;
-        gam0 = gam;
+        if( slider ){
+            alp0 = sliderA.value;
+            bet0 = sliderB.value;
+            gam0 = sliderC.value;
+        }else{
+            alp0 = alp;
+            bet0 = bet;
+            gam0 = gam;
+        }
         update()
     })
 
     function resize(){
         console.log( 'resize' );
-
         alp0 = alp;
         bet0 = bet;
         gam0 = gam;
-
         let dcm = calcDCM( alp, bet, gam );
         view1.resize( dcm );
         canvas2.setAttribute( "width", screen.width );
         canvas2.setAttribute( "height", screen.height );
     }
 
-
     function update(){
         //console.log( 'update' );
-
-        //alp = sliderA.value;
-        //bet = sliderB.value;
-        //gam = sliderC.value;
-
+        if( slider ){
+            alp = sliderA.value;
+            bet = sliderB.value;
+            gam = sliderC.value;
+        }
         let dcm = calcDCM( alp, bet, gam );
         view1.update( dcm );
     }
-
 
     navigator.mediaDevices
         .getUserMedia({ audio: false, video: { facingMode: "environment" } })
