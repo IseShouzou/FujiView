@@ -103,7 +103,7 @@ onload = function(){
                             for( let j=0; j<3; j++ ){
                                 dcmX[i][j] = 0.0;
                                 for( let k=0; k<3; k++ ){
-                                    dcmX[i][j] += dcm[i][k] * dcm0[k][j];
+                                    dcmX[i][j] += dcm[i][k] * dcm0[j][k];
                                 }
                             }
                         }
