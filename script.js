@@ -9,6 +9,12 @@ onload = function(){
     let sliderB = document.getElementById( "SliderBeta"  );
     let sliderC = document.getElementById( "SliderGamma" );
 
+    if( ! slider ){
+        for( var elm of document.getElementsByClassName( "Sliders" ) ){
+            elm.style.visibility ="hidden";
+        }
+    }
+
     let alp0 = 0.0;
     let bet0 = 0.0;
     let gam0 = 0.0;
